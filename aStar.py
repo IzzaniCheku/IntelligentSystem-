@@ -93,25 +93,7 @@ def expansionCost(validMoves, string2):
                     cost = 0
                     string2[j],string2[j-3] = string2[j-3],string2[j]
 
-
     return expand
-
-# hn function
-def hn(enlarge):
-    hnList = []
-    countz = 0 
-    for i in range(len(enlarge)):
-        for j in range(len(enlarge[i])):
-            if enlarge[i][j] == 'B':
-                for k in range(j,len(enlarge[i])-1):
-                    if enlarge[i][k] == 'W':
-                        countz = countz + 1
-                        enlarge[i][k] = '_'
-                        break
-        hnList.append(countz)
-        countz = 0
-    return hnList
-
 
 # gn function
 def gn(enlarge):
@@ -124,24 +106,54 @@ def gn(enlarge):
 
     return gnList
 
+
+# hn function
+def hn(enlarge):
+    hnfunction = enlarge[:]
+    hnList = []
+    countz = 0 
+    for i in range(len(hnfunction)):
+        for j in range(len(hnfunction[i])):
+            if hnfunction[i][j] == 'B':
+                for k in range(j,len(hnfunction[i])-1):
+                    if hnfunction[i][k] == 'W':
+                        countz = countz + 1
+                        hnfunction[i][k] = '_'
+                        break
+        hnList.append(countz)
+        countz = 0
+    return hnList
+
+
 # fn function
-##def fn(
+def fn(gnValu, hnValu):
+    addition = []
+    for i in range(len(gnValu)):
+        for j in range(len(hnValu)):
+            if i == j:
+                x = gnValu[i] + hnValu[j]
+                addition.append(x)
+                
+    return addition 
 
-# ancestor
-##def checkancestor(enlarge):
-##    storeAncestor = enlarge[:]
-##    frontier = randpm[:]
-##    highbred = []
-##    for i in range(len(store)):
-##        if storeAncestor[i] != frontier:
-##            highbred.append(storeAncestor[i])
+# changebackkkkkkk for ancestor omg 
+def changeBack(enlarge):
+    for i in range(len(enlarge)):
+        for j in range(len(enlarge[i])):
+            if enlarge[i][j] == '_' :
+                enlarge[i][j] = 'W'
+    return enlarge             
 
-
-# printing
-def printz(alist):
-    for i in range(len(alist)):
-        print(alist[i])
-
+# pick min valu(s)
+def minValus(fnValu):
+    minIndex = []
+    smallest = min(fnValu)
+    for index, element in enumerate(fnValu):
+            if smallest == element: # check if this element is the minimum_value
+                    minIndex.append(index) # add the index to the list if it is
+s
+    return smallest, minIndex
+            
 ##############################--TESTINGAREA--###################################
 
 string = 'WEBBW'
@@ -155,10 +167,20 @@ validMoves = initialize(lc)
 ##print(validMoves)
 ##print('this one:' + str(stringList))
 enlarge = expansionCost(validMoves,stringList)
-print(enlarge)
+##print('enlarge' + str(enlarge))
 gnValu = gn(enlarge)
 print(gnValu)
+##print('gn' + str(enlarge))
 hnValu = hn(enlarge)
 print(hnValu)
+##print('hn' + str(enlarge))
 ##printz(enlarge)
 ##checkancestor(enlarge)
+fnValu = fn(gnValu,hnValu)
+print(fnValu)
+##print('fn' + str(enlarge))
+ohgod = changeBack(enlarge)
+print(ohgod)
+findmin = minValus(hnValu)
+print(findmin)
+
