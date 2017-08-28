@@ -136,7 +136,7 @@ def fn(gnValu, hnValu):
                 
     return addition 
     
-##############################--TESTINGAREA--###################################
+##############################--INITIALIZING--###################################
 
 string = 'BBBWWWE'
 stringList = listChange(string)
@@ -201,14 +201,8 @@ while True :
         if fList[i][0] == small:
             potter = fList[i][1]
                 
-            #moved = fList[i][-1]
-
-    #print(small)
-    #potter = fList[0][1] # chosen one
     validMoves = initialize(potter)
-##    print(validMoves)
     expand = expansionCost(validMoves,potter)
-    #print(expand)
     for i in range(len(database)):
         if database[i][0] == potter:
             parentsG = database[i][1]
@@ -243,8 +237,6 @@ while True :
         if openList[i] == potter:
             del openList[i]
             break
-
-    #print(database)
 
 print(sol)         
 
