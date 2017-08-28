@@ -125,28 +125,6 @@ def hnfirst (asdf):
 ##    print(stringList)
     return hnList2
 
-# hn function
-def hn(asdf):
-    hnfunction = []
-    hnList = []
-    countz = 0
-    for i in range(len(asdf)):
-        hnfunction.append(asdf[i])
-    for i in range(len(hnfunction)):
-        for j in range(len(hnfunction[i])):
-            if hnfunction[i][j] == 'B':
-                for k in range(j,len(hnfunction[i])-1):
-                    if hnfunction[i][k] == 'W':
-                        countz = countz + 1
-                        hnfunction[i][k] = '_'
-                        break
-        hnList.append(countz)
-        countz = 0
-##        print(enlarge)
-##        print(hnfunction)
-    return hnList
-
-
 # fn function
 def fn(gnValu, hnValu):
     addition = []
@@ -157,32 +135,10 @@ def fn(gnValu, hnValu):
                 addition.append(x)
                 
     return addition 
-
-# changebackkkkkkk for ancestor omg 
-def changeBack(enlarge):
-    for i in range(len(enlarge)):
-        for j in range(len(enlarge[i])):
-            if enlarge[i][j] == '_' :
-                enlarge[i][j] = 'W'
-    return enlarge             
-
-# pick min valu(s)
-def minValus(fnValu):
-    minIndex = []
-    smallest = min(fnValu)
-    for index, element in enumerate(fnValu):
-            if smallest == element: # check if this element is the minimum_value
-                    minIndex.append(index) # add the index to the list if it is
-
-    return smallest, minIndex
-
-# favoritism
-##def favoritism (enlarge):
-
     
 ##############################--TESTINGAREA--###################################
 
-string = 'BBWWE'
+string = 'BBBWWWE'
 stringList = listChange(string)
 
 database = []
@@ -190,7 +146,7 @@ temp = []
 hFunction = hnfirst(stringList)
 gFunction = 0
 fFunction = hFunction[0]  + gFunction 
-print(fFunction)
+##print(fFunction)
 temp.append(stringList)
 temp.append(gFunction)
 temp.append(hFunction[0])
@@ -209,26 +165,48 @@ print(openList)
 
 ##############################--LOOPPOINT--###################################
 '''
-todo: check ancestors!
 todo: favoritism!
-todo: eat first!
 '''
+        
 while True :
     end = False
     fList = []
-    tempList = []
     for i in range(len(openList)):
-        for j in range(len(database)):
+        for j in range(len(database)): 
             if openList[i] == database[j][0]:
+                tempList = []
                 tempList.append(database[j][3])
                 tempList.append(openList[i])
+                tempList.append(database[j][5])
                 fList.append(tempList)
-    #print(fList)
+                
     small = min(fList)
+    small = small[0]
+    smalls = []
+    prefered = [] 
+    if fList.count(small) > 1:
+        for i in range(len(fList)):
+            if fList[i][0] == small:
+                smalls.append(fList[i])
+        for j in range(len(smalls)):
+            if smalls[j][-1] == '2R' or smalls[j][-1] == '3R':
+                prefered.append(smalls[j])
+                if len(prefered) > 1 :
+                    potter = prefered[0][1]
+                if len(prefered) == 1:
+                    potter = prefered[1]
+                else:
+                    potter = smalls[0][1]
+    for i in range(len(fList)):
+        if fList[i][0] == small:
+            potter = fList[i][1]
+                
+            #moved = fList[i][-1]
+
     #print(small)
-    potter = fList[0][1] # chosen one
+    #potter = fList[0][1] # chosen one
     validMoves = initialize(potter)
-    print(validMoves)
+##    print(validMoves)
     expand = expansionCost(validMoves,potter)
     #print(expand)
     for i in range(len(database)):
@@ -236,7 +214,6 @@ while True :
             parentsG = database[i][1]
             break
     for i in range(len(expand)):
-        #for j in range(len(expand[i])):
             childG = expand[i].pop(-1)
             sTring = expand[i]
             move = validMoves[i]
@@ -252,8 +229,9 @@ while True :
             tempList.append(eff)
             tempList.append(potter)
             tempList.append(move)
-            database.append(tempList)
-            openList.append(sTring)
+            if sTring not in closeList:
+                database.append(tempList)
+                openList.append(sTring)
             if end == True:
                 sol = sTring
                 break
@@ -265,7 +243,7 @@ while True :
         if openList[i] == potter:
             del openList[i]
             break
-    print('\n')
+
     #print(database)
 
 print(sol)         
@@ -277,7 +255,7 @@ while whereufrom != None:
     for i in range(len(database)):
         if whereufrom == database[i][0]:
             tepm = []
-            tepm.append(database[i][3])
+            tepm.append(database[i][1])
             tepm.append(database[i][0])
             tepm.append(database[i][-1])
             view.append(tepm)
@@ -286,9 +264,4 @@ while whereufrom != None:
         
 for i in range(len(view)):
     print(view[i])
-            
-            
-        
-
-
 
