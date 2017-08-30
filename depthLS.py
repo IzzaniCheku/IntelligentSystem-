@@ -12,23 +12,17 @@ def initialize (lizt):
     for i in range(len(lizt)):
         if lizt[i] == 'E':
             start = i
-    step1 = start + 1
-    step2 = start + 2
-    step3 = start + 3
-    step4 = start - 1
-    step5 = start - 2
-    step6 = start - 3
-    if (0 <= step1 < len(lizt)):
+    if (0 <= start + 1 < len(lizt)):
         valid.append('1R')
-    if (0 <= step2 < len(lizt)):
+    if (0 <= start + 2  < len(lizt)):
         valid.append('2R')
-    if (0 <= step3 < len(lizt)):
+    if (0 <= start + 3 < len(lizt)):
         valid.append('3R')
-    if (0 <= step4 < len(lizt)):
+    if (0 <= start - 1 < len(lizt)):
         valid.append('1L')
-    if (0 <= step5 < len(lizt)):
+    if (0 <= start - 2 < len(lizt)):
         valid.append('2L')
-    if (0 <= step6 < len(lizt)):
+    if (0 <= start - 3 < len(lizt)):
         valid.append('3L')
     return valid
 
@@ -76,32 +70,42 @@ def expansionCost(validMoves, string2):
 
     return expand
 
- 
+def loopchecker (asdf):
+    tocount = []
+    for i in range(len(asdf)):
+        if asdf[i] != 'E':
+            tocount.append(asdf[i])
+    countW = tocount.count('W')
+
+    return countW
+
+def last(endcheck, fdsa):
+    checkagain = []
+    for i in range(len(fdsa)):
+        if fdsa[i] != 'E':
+            checkagain.append(fdsa[i])
+            
+    for i in range(0,endcheck):
+        if checkagain[i] != 'W':
+            return False
+    return True
+
 ##############################--INITIALIZING--###################################
-
-string = 'BEWWB'
+string = 'BBBWWWE'
+limit = 9
 stringList = listChange(string)
-
 database = []
 temp = [] 
-##print(fFunction)
 temp.append(stringList)
 print(temp)
+
 temp.append(None) # where they came from 
-temp.append(None) # how many moves taken 
+temp.append(None) # how many moves taken
+temp.append(0)    # depth 
 database.append(temp)
 print(database)
-##temp = []
-##print(database)
-
-
-##print(openList)
-
 ##############################--LOOPPOINT--###################################
-'''
-todo: favoritism!
-'''
-w = open("outputLimitSearch.txt", "w") #write at outputbwt.txt
+#w = open("outputLimitSearch.txt", "w") #write at outputlimitSearch.txt
 
 OPEN = []
 CLOSE = []
@@ -109,22 +113,40 @@ CLOSE = []
 OPEN.append(stringList)
 print(OPEN[0])
 
+
+
 end = False
-while end == False :
-    
+endcheck = loopchecker(stringList) # count the w's
+while len(OPEN) > 0 :
     potter = OPEN.pop(-1)
+    last2 = last(endcheck,potter) # check for the W's
+    if last2 == True:   #checks for end node
+        break
+    for i in range(len(database)):
+        if database[i][0] == potter:
+            depth = database[i][3]
+    CLOSE.append(potter)
+    if depth == limit - 1:  #make sure do not search past depth limit
+        continue
     validMoves = initialize(potter)
     expand = expansionCost(validMoves, potter)
     for i in range(len(expand)):
             if expand[i] not in CLOSE and expand[i] not in OPEN: # check ancestor
-                print(expand[i])
+                temp = []
                 OPEN.append(expand[i])
-    CLOSE.append(potter)
+                temp.append(expand[i])
+                temp.append(potter)
+                temp.append(validMoves[i])
+                temp.append(depth + 1)
+                database.append(temp)
+                #print(database)
     
-    end = True
-    if end == True:
-        sol = sTring
-        break 
+if len(OPEN) == 0:
+    print('no answer found at this limit')
+else:
+    print(potter)
+    # todo: potter is the answer, use potter backtrack the path
+    next
+#w.close()
 
-w.close()
-
+################################################################################
